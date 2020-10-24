@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -19,6 +21,7 @@ import lombok.Data;
 
 @Entity
 @Table(name= "motores")
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @Data
 public class Motor implements Serializable{
 

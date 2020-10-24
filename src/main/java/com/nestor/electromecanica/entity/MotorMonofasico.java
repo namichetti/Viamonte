@@ -2,6 +2,7 @@ package com.nestor.electromecanica.entity;
 
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 import lombok.Data;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
+@DiscriminatorValue("motor_mosofasico")
 public class MotorMonofasico extends Motor {
 	
 	private static final long serialVersionUID = 1L;
