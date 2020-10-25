@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,12 +18,16 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Entity
 @Table(name= "motores")
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @Data
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="tipo")
 public class Motor implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -42,8 +47,11 @@ public class Motor implements Serializable{
 	private String largoBobina;
 	@Column(name="tipo_conexion")
 	private String tipoConexion;
+	
 	@ManyToOne(fetch=FetchType.LAZY)
+	@JsonIgnore
 	private Cliente cliente;
+	
 	@OneToMany(fetch=FetchType.LAZY)
 	@JoinColumn(name="motor_id")
 	private List<Reparacion> reparaciones;

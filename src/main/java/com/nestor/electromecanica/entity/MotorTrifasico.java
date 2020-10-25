@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
+@DiscriminatorValue(value="motor_trifasico")
 @Data
-@DiscriminatorValue("motor_trafasico")
 public class MotorTrifasico extends Motor{
 
 	private static final long serialVersionUID = 1L;

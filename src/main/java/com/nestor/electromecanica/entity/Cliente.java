@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import lombok.Data;
 
 @Entity
@@ -30,6 +29,7 @@ public class Cliente implements Serializable{
 	private String apellido;
 	private String celular;
 	private String telefono;
+
 	@OneToMany(mappedBy="cliente",fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
 	private List<Motor> motores;
 	

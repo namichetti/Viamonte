@@ -84,7 +84,7 @@ public class ClienteController {
 			clienteUpdate.setApellido(cliente.getApellido());
 			clienteUpdate.setCelular(cliente.getCelular());
 			clienteUpdate.setTelefono(cliente.getTelefono());
-			clienteUpdate.setMotores(cliente.getMotores());
+			//clienteUpdate.setMotores(cliente.getMotores());
 			clienteNew = this.clienteService.saveCliente(clienteUpdate);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error alactualizar el cliente en la BD");
