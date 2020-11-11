@@ -84,10 +84,10 @@ public class ClienteController {
 			clienteUpdate.setApellido(cliente.getApellido());
 			clienteUpdate.setCelular(cliente.getCelular());
 			clienteUpdate.setTelefono(cliente.getTelefono());
-			//clienteUpdate.setMotores(cliente.getMotores());
+			clienteUpdate.setMotores(cliente.getMotores());
 			clienteNew = this.clienteService.saveCliente(clienteUpdate);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error alactualizar el cliente en la BD");
+			response.put("mensaje", "Error al actualizar el cliente en la BD");
 			response.put("error", e.getMostSpecificCause() + " " + e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
