@@ -17,99 +17,97 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nestor.electromecanica.entity.Cliente;
-import com.nestor.electromecanica.service.IClienteService;
+import com.nestor.electromecanica.entity.Venta;
+import com.nestor.electromecanica.service.IVentaService;
 
 @RestController
 @RequestMapping("/api")
-public class ClienteController {
+public class VentaController {
 
 	@Autowired
-	private IClienteService clienteService;
+	private IVentaService ventaService;
 	
-	@GetMapping("/cliente")
-	public List<Cliente> getClientes(){
-		return this.clienteService.getClientes();
+	@GetMapping("/venta")
+	public List<Venta> getVenta(){
+		return ventaService.getVentas();
 	}
 	
-	@GetMapping("/cliente/{id}")
+	@GetMapping("/venta/{id}")
 	public ResponseEntity<?> getCliente(@PathVariable Long id){
 		Map<String, Object> response = new HashMap<String, Object>();
-		Cliente cliente = null;
+		Venta venta = null;
 		try {
-			cliente = this.clienteService.getCliente(id);
+			venta = this.ventaService.getVenta(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al buscar el cliente a la BD.");
+			response.put("mensaje", "Error al buscar el venta a la BD.");
 			response.put("error", e.getMostSpecificCause() + " " + e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
-		if(cliente == null) {
-			response.put("mensaje", "No existe cliente.");
+		if(venta == null) {
+			response.put("mensaje", "No existe venta.");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
+		return new ResponseEntity<Venta>(venta, HttpStatus.OK);
 	}
 	
-	@PostMapping("/cliente")
-	public ResponseEntity<?> createCliente(@RequestBody Cliente cliente){
-	Cliente clienteNew = null;
+	@PostMapping("/venta")
+	public ResponseEntity<?> createCliente(@RequestBody Venta venta){
+	Venta ventaeNew = null;
 	Map<String, Object> response = new HashMap<String, Object>();
 	
 	try {
-		clienteNew = this.clienteService.saveCliente(cliente);
+		ventaeNew = this.ventaService.saveVenta(venta);
 	} catch (DataAccessException e) {
-		response.put("mensaje", "Error al dar de alta el cliente en la BD");
+		response.put("mensaje", "Error al dar de alta el venta en la BD");
 		response.put("error", e.getMostSpecificCause() + " " + e.getMessage());
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 	}
 	
-	if(clienteNew == null) {
-		response.put("mensaje", "No pudo darse de alta al cliente.");
+	if(ventaeNew == null) {
+		response.put("mensaje", "No pudo darse de alta al venta.");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 	}
-	return new ResponseEntity<Cliente>(clienteNew, HttpStatus.OK);
+	return new ResponseEntity<Venta>(ventaeNew, HttpStatus.OK);
 	}
 	
-	@PutMapping("/cliente/{id}")
-	public ResponseEntity<?> updateCliente(@PathVariable Long id, @RequestBody Cliente cliente){
-		Cliente clienteUpdate = null;
-		Cliente clienteNew    = null;
+	@PutMapping("/venta/{id}")
+	public ResponseEntity<?> updateCliente(@PathVariable Long id, @RequestBody Venta venta){
+		Venta ventaUpdate = null;
+		Venta ventaNew    = null;
 		Map<String, Object> response = new HashMap<String, Object>();
 		
 		try {
-			clienteUpdate = this.clienteService.getCliente(id);
-			clienteUpdate.setNombre(cliente.getNombre());
-			clienteUpdate.setApellido(cliente.getApellido());
-			clienteUpdate.setCelular(cliente.getCelular());
-			clienteUpdate.setTelefono(cliente.getTelefono());
-			clienteUpdate.setMotores(cliente.getMotores());
-			clienteNew = this.clienteService.saveCliente(clienteUpdate);
+			ventaUpdate = this.ventaService.getVenta(id);
+			ventaUpdate.setCantidad(venta.getCantidad());;
+			ventaUpdate.setFechaVenta(venta.getFechaVenta());
+			ventaUpdate.setHoraVenta(venta.getHoraVenta());
+			ventaUpdate.setImporteTotal(venta.getImporteTotal());
+			ventaNew = this.ventaService.saveVenta(ventaUpdate);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al actualizar el cliente en la BD");
+			response.put("mensaje", "Error al actualizar el venta en la BD");
 			response.put("error", e.getMostSpecificCause() + " " + e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 	
-		return new ResponseEntity<Cliente>(clienteNew, HttpStatus.OK);
+		return new ResponseEntity<Venta>(ventaNew, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/cliente/{id}")
+	@DeleteMapping("/venta/{id}")
 	public ResponseEntity<?> deleteCliente(@PathVariable Long id) {
 		Map<String, Object> response = new HashMap<String, Object>();
 		try {
-			this.clienteService.deleteCliente(id);
+			this.ventaService.deleteVenta(id);
 			
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error eliminar el cliente de la BD");
+			response.put("mensaje", "Error eliminar la venta de la BD");
 			response.put("error", e.getMostSpecificCause() + " " + e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-		 response.put("mensaje","Cliente eliminado con éxito.");
+		 response.put("mensaje","Venta eliminada con éxito.");
 		 return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
-	
 	
 	
 }
