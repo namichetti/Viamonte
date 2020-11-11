@@ -48,7 +48,7 @@ public class MaterialController {
 			return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND); 
 		}
 		
-		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
+		return new ResponseEntity<Material>(material, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/material/{id}")
