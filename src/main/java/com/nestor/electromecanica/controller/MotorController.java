@@ -1,5 +1,6 @@
 package com.nestor.electromecanica.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,11 +13,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nestor.electromecanica.entity.Motor;
+import com.nestor.electromecanica.entity.MotorMonofasico;
+import com.nestor.electromecanica.entity.MotorTrifasico;
 import com.nestor.electromecanica.service.IMotorService;
 
 
@@ -90,5 +94,65 @@ public class MotorController {
 		response.put("mensaje", "Motor eliminado con éxito.");
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
+	
+	@PutMapping("/motor/{id}")
+	public ResponseEntity<?> updateMotor(@PathVariable Long id, MotorMonofasico motorMonofasico, 
+										MotorTrifasico motorTrifasico){
+		MotorMonofasico motorMonofasicoNew = null;
+		MotorMonofasico motorMonofasicoUpdated = null;
+		MotorTrifasico  MotorTrifasicoNew  = null;
+		MotorTrifasico  MotorTrifasicoUpdated  = null;
+		Map<String,Object> response = new HashMap<String,Object>();
 
+		try {
+			
+			motorMonofasicoNew = (MotorMonofasico) this.motorService.getMotor(id);
+			motorMonofasicoNew.setCliente(motorMonofasico.getCliente());
+			motorMonofasicoNew.setHp(motorMonofasico.getHp());
+			motorMonofasicoNew.setLargoBobina(motorMonofasico.getLargoBobina());
+			motorMonofasicoNew.setLargoNucleo(motorMonofasico.getLargoNucleo());
+			motorMonofasicoNew.setMarca(motorMonofasico.getMarca());
+			motorMonofasicoNew.setMateriales(motorMonofasico.getMateriales());
+			motorMonofasicoNew.setNombre(motorMonofasico.getNombre());
+			motorMonofasicoNew.setReparaciones(motorMonofasico.getReparaciones());
+			motorMonofasicoNew.setRevolucionesPorMinuto(motorMonofasico.getRevolucionesPorMinuto());
+			motorMonofasicoNew.setTipoConexion(motorMonofasico.getTipoConexion());
+			motorMonofasicoNew.setVoltios(motorMonofasico.getVoltios());
+			motorMonofasicoNew.setSeccionCobreBobinaTrabajo(motorMonofasico.getSeccionCobreBobinaTrabajo());
+			motorMonofasicoNew.setSeccionCobreBobinaArranque(motorMonofasico.getSeccionCobreBobinaArranque());
+			motorMonofasicoNew.setVueltasBobinaArranque(motorMonofasico.getVueltasBobinaArranque());
+			motorMonofasicoNew.setVueltasBobinaTrabajo(motorMonofasico.getVueltasBobinaTrabajo());
+			motorMonofasicoUpdated = (MotorMonofasico) this.motorService.saveMotor(motorMonofasicoNew);
+			
+			MotorTrifasicoNew = (MotorTrifasico) this.motorService.getMotor(id);
+			MotorTrifasicoNew.setCliente(motorTrifasico.getCliente());
+			MotorTrifasicoNew.setHp(motorTrifasico.getHp());
+			MotorTrifasicoNew.setLargoBobina(motorTrifasico.getLargoBobina());
+			MotorTrifasicoNew.setLargoNucleo(motorTrifasico.getLargoNucleo());
+			MotorTrifasicoNew.setMarca(motorTrifasico.getMarca());
+			MotorTrifasicoNew.setMateriales(motorTrifasico.getMateriales());
+			MotorTrifasicoNew.setNombre(motorTrifasico.getNombre());
+			MotorTrifasicoNew.setReparaciones(motorTrifasico.getReparaciones());
+			MotorTrifasicoNew.setRevolucionesPorMinuto(motorTrifasico.getRevolucionesPorMinuto());
+			MotorTrifasicoNew.setTipoConexion(motorTrifasico.getTipoConexion());
+			MotorTrifasicoNew.setVoltios(motorTrifasico.getVoltios());
+			MotorTrifasicoNew.setRanuraLlena(motorTrifasico.getRanuraLlena());
+			MotorTrifasicoNew.setSeccionAlambre(motorTrifasico.getSeccionAlambre());
+			MotorTrifasicoNew.setVueltasBobina(motorTrifasico.getVueltasBobina());
+			MotorTrifasicoNew.setCantidadRanuras(motorTrifasico.getCantidadRanuras());
+			MotorTrifasicoUpdated = (MotorTrifasico) this.motorService.saveMotor(MotorTrifasicoNew);
+			
+			
+		} catch (DataAccessException e) {
+			response.put("error", e.getMessage() + " " + e.getMostSpecificCause());
+			response.put("mensaje", "Error al eliminar el motor de la BD.");
+			return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		
+		List<Motor> motores = new ArrayList<Motor>();
+		motores.add(MotorTrifasicoUpdated);
+		motores.add(motorMonofasicoUpdated);
+		return new ResponseEntity<List<Motor>>(motores,HttpStatus.OK);		
+				
+	}
 }
