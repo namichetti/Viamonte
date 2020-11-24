@@ -1,6 +1,5 @@
 package com.nestor.electromecanica.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,20 +55,36 @@ public class MotorController {
 		return new ResponseEntity<Motor>(motor,HttpStatus.OK);
 	}
 	
-	@PostMapping("/motor")
-	public ResponseEntity<?> saveMotor(@RequestBody Motor motor){
-		Motor motorNew = null;
+	@PostMapping("/motor_monofasico")
+	public ResponseEntity<?> saveMotor(@RequestBody MotorMonofasico motorMonofasico){
+		MotorMonofasico motorMonofasicoNew = null;
 		Map<String, Object> response = new HashMap<String,Object>();
 		
 		try {
-			motorNew = this.motorService.saveMotor(motor);
+			motorMonofasicoNew = (MotorMonofasico) this.motorService.saveMotor(motorMonofasico);
 		} catch (DataAccessException e) {
 			response.put("error", e.getMessage() +" "+e.getLocalizedMessage());
 			response.put("mensaje", "Error al buscar el motor en la BD");
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<Motor>(motorNew,HttpStatus.OK);
+		return new ResponseEntity<Motor>(motorMonofasicoNew,HttpStatus.OK);
+	}
+	
+	@PostMapping("/motor_trifasico")
+	public ResponseEntity<?> saveMotorTrifasico(@RequestBody MotorTrifasico motorTrifasico){
+		MotorTrifasico  motorTrifasicoNew = null;
+		Map<String, Object> response = new HashMap<String,Object>();
+		
+		try {
+			motorTrifasicoNew  = (MotorTrifasico) this.motorService.saveMotor(motorTrifasico);
+		} catch (DataAccessException e) {
+			response.put("error", e.getMessage() +" "+e.getLocalizedMessage());
+			response.put("mensaje", "Error al buscar el motor en la BD");
+			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+		}
+		
+			return new ResponseEntity<Motor>(motorTrifasicoNew,HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/motor/{id}")
@@ -95,34 +110,13 @@ public class MotorController {
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	
-	@PutMapping("/motor/{id}")
-	public ResponseEntity<?> updateMotor(@PathVariable Long id, MotorMonofasico motorMonofasico, 
-										MotorTrifasico motorTrifasico){
-		MotorMonofasico motorMonofasicoNew = null;
-		MotorMonofasico motorMonofasicoUpdated = null;
+	@PutMapping("/motor_trifasico/{id}")
+	public ResponseEntity<?> updateMotorTrifasico(@PathVariable Long id, @RequestBody MotorTrifasico motorTrifasico){
 		MotorTrifasico  MotorTrifasicoNew  = null;
 		MotorTrifasico  MotorTrifasicoUpdated  = null;
 		Map<String,Object> response = new HashMap<String,Object>();
 
 		try {
-			
-			motorMonofasicoNew = (MotorMonofasico) this.motorService.getMotor(id);
-			motorMonofasicoNew.setCliente(motorMonofasico.getCliente());
-			motorMonofasicoNew.setHp(motorMonofasico.getHp());
-			motorMonofasicoNew.setLargoBobina(motorMonofasico.getLargoBobina());
-			motorMonofasicoNew.setLargoNucleo(motorMonofasico.getLargoNucleo());
-			motorMonofasicoNew.setMarca(motorMonofasico.getMarca());
-			motorMonofasicoNew.setMateriales(motorMonofasico.getMateriales());
-			motorMonofasicoNew.setNombre(motorMonofasico.getNombre());
-			motorMonofasicoNew.setReparaciones(motorMonofasico.getReparaciones());
-			motorMonofasicoNew.setRevolucionesPorMinuto(motorMonofasico.getRevolucionesPorMinuto());
-			motorMonofasicoNew.setTipoConexion(motorMonofasico.getTipoConexion());
-			motorMonofasicoNew.setVoltios(motorMonofasico.getVoltios());
-			motorMonofasicoNew.setSeccionCobreBobinaTrabajo(motorMonofasico.getSeccionCobreBobinaTrabajo());
-			motorMonofasicoNew.setSeccionCobreBobinaArranque(motorMonofasico.getSeccionCobreBobinaArranque());
-			motorMonofasicoNew.setVueltasBobinaArranque(motorMonofasico.getVueltasBobinaArranque());
-			motorMonofasicoNew.setVueltasBobinaTrabajo(motorMonofasico.getVueltasBobinaTrabajo());
-			motorMonofasicoUpdated = (MotorMonofasico) this.motorService.saveMotor(motorMonofasicoNew);
 			
 			MotorTrifasicoNew = (MotorTrifasico) this.motorService.getMotor(id);
 			MotorTrifasicoNew.setCliente(motorTrifasico.getCliente());
@@ -149,10 +143,44 @@ public class MotorController {
 			return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
-		List<Motor> motores = new ArrayList<Motor>();
-		motores.add(MotorTrifasicoUpdated);
-		motores.add(motorMonofasicoUpdated);
-		return new ResponseEntity<List<Motor>>(motores,HttpStatus.OK);		
+		return new ResponseEntity<Motor>(MotorTrifasicoUpdated,HttpStatus.OK);		
+				
+	}
+	
+	@PutMapping("/motor_monofasico/{id}")
+	public ResponseEntity<?> updateMotorMonofasico(@PathVariable Long id, @RequestBody MotorMonofasico motorMonofasico){
+		MotorMonofasico motorMonofasicoNew = null;
+		MotorMonofasico motorMonofasicoUpdated = null;
+		Map<String,Object> response = new HashMap<String,Object>();
+
+		try {
+			
+			motorMonofasicoNew = (MotorMonofasico) this.motorService.getMotor(id);
+			motorMonofasicoNew.setCliente(motorMonofasico.getCliente());
+			motorMonofasicoNew.setHp(motorMonofasico.getHp());
+			motorMonofasicoNew.setLargoBobina(motorMonofasico.getLargoBobina());
+			motorMonofasicoNew.setLargoNucleo(motorMonofasico.getLargoNucleo());
+			motorMonofasicoNew.setMarca(motorMonofasico.getMarca());
+			motorMonofasicoNew.setMateriales(motorMonofasico.getMateriales());
+			motorMonofasicoNew.setNombre(motorMonofasico.getNombre());
+			motorMonofasicoNew.setReparaciones(motorMonofasico.getReparaciones());
+			motorMonofasicoNew.setRevolucionesPorMinuto(motorMonofasico.getRevolucionesPorMinuto());
+			motorMonofasicoNew.setTipoConexion(motorMonofasico.getTipoConexion());
+			motorMonofasicoNew.setVoltios(motorMonofasico.getVoltios());
+			motorMonofasicoNew.setSeccionCobreBobinaTrabajo(motorMonofasico.getSeccionCobreBobinaTrabajo());
+			motorMonofasicoNew.setSeccionCobreBobinaArranque(motorMonofasico.getSeccionCobreBobinaArranque());
+			motorMonofasicoNew.setVueltasBobinaArranque(motorMonofasico.getVueltasBobinaArranque());
+			motorMonofasicoNew.setVueltasBobinaTrabajo(motorMonofasico.getVueltasBobinaTrabajo());
+			motorMonofasicoUpdated = (MotorMonofasico) this.motorService.saveMotor(motorMonofasicoNew);
+			
+			
+		} catch (DataAccessException e) {
+			response.put("error", e.getMessage() + " " + e.getMostSpecificCause());
+			response.put("mensaje", "Error al eliminar el motor de la BD.");
+			return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<Motor>(motorMonofasicoUpdated,HttpStatus.OK);		
 				
 	}
 }
