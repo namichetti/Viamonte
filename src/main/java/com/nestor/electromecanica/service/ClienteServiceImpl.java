@@ -36,7 +36,7 @@ public class ClienteServiceImpl implements IClienteService {
 	@Override
 	@Transactional
 	public Cliente saveCliente(Cliente cliente) {
-		return this.saveCliente(cliente);
+		return this.clienteDao.save(cliente);
 	}
 
 }
